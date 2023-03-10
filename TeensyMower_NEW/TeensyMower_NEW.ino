@@ -1,14 +1,14 @@
 #include <Wire.h>
 #include "pin_definations.h"
 #include "config.h"
-#include "src/INA226/INA226.h"
-#include "src/NewPing/NewPing.h"
-
-
+#include "src/INA226.h"
 
 //NewPing for the Ultrasonic Sensors
-NewPing sonar_left(pinSonarLeftTrigger, pinSonarLeftEcho, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+#ifdef usessonar
+#include "src/NewPing.h"
+NewPing sonar_left(pinSonarLeftTrigger, pinSonarLeftEcho, MAX_DISTANCE);
 NewPing sonar_right(pinSonarRightTrigger, pinSonarRightEcho, MAX_DISTANCE);
+#endif
 
 void setup() {
   Wire.begin();
