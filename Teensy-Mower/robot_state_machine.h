@@ -1,69 +1,51 @@
-// States des Roboters
+#ifndef ROBOT_STATE_MACHINE_H
+#define ROBOT_STATE_MACHINE_H
+
+#include "Arduino.h"
+#include "sensor_controller.h"
+#include "motor_controller.h"
+#include "battery_controller.h"
+#include "perimeter_controller.h"
+#include "setup_functions.h"
+
 enum class RobotState {
   IDLE,
-  CHARGING,
+  LEAVE_STATION,
   MOWING,
-  LEAVING_STATION,
-  PERIMETER_TRACKING
+  PERIMETER_TRACKING,
+  SEARCH_PERIMETER,
+  CHARGING,
+  ERROR
 };
 
-// Mögliche Mähmodi
-enum class MowMode {
-  RANDOM,
-  LANE,
-  SPIRAL
+class RobotStateMachine {
+  public:
+    RobotStateMachine(SensorController& sensor_controller, MotorController& motor_controller, BatteryController& battery_controller, PerimeterController& perimeter_controller, SetupFunctions& setup_functions);
+
+    void set_mowing_time(unsigned long time_ms);
+    void set_mowing_end_time(unsigned long time_ms);
+    void set_start_time(unsigned long time_ms);
+    void set_stop_time(unsigned long time_ms);
+
+    RobotState get_state();
+    void set_state(RobotState state);
+
+    void run();
+    void print_state();
+
+  private:
+    SensorController& _sensor_controller;
+    MotorController& _motor_controller;
+    BatteryController& _battery_controller;
+    PerimeterController& _perimeter_controller;
+    SetupFunctions& _setup_functions;
+
+    unsigned long _mowing_time_ms;
+    unsigned long _mowing_end_time_ms;
+    unsigned long _start_time_ms;
+    unsigned long _stop_time_ms;
+
+    RobotState _state;
 };
 
-// Initialer Zustand des Roboters
-RobotState robotState = RobotState::IDLE;
-
-// Initialer Mähmodus
-MowMode mowMode = MowMode::RANDOM;
-
-// Zustandsübergänge des Roboters
-void updateRobotState() {
-  switch (robotState) {
-    case RobotState::IDLE:
-      // Wenn der Akku unter einen bestimmten Wert fällt, wechsle in CHARGING State
-      if (batteryLevel < 20) {
-        robotState = RobotState::CHARGING;
-      }
-      // Wenn ein Mähmodus ausgewählt wurde, wechsle in MOWING State
-      else if (mowMode != MowMode::RANDOM) {
-        robotState = RobotState::MOWING;
-      }
-      break;
-
-    case RobotState::CHARGING:
-      // Wenn der Akku voll aufgeladen ist, wechsle in IDLE State
-      if (batteryLevel == 100) {
-        robotState = RobotState::IDLE;
-      }
-      break;
-
-    case RobotState::MOWING:
-      // Wenn der Akku unter einen bestimmten Wert fällt, wechsle in LEAVING_STATION State
-      if (batteryLevel < 20) {
-        robotState = RobotState::LEAVING_STATION;
-      }
-      break;
-
-    case RobotState::LEAVING_STATION:
-      // Wenn der Roboter die Ladestation verlassen hat, wechsle in PERIMETER_TRACKING State
-      if (!isOnCharger()) {
-        robotState = RobotState::PERIMETER_TRACKING;
-      }
-      break;
-
-    case RobotState::PERIMETER_TRACKING:
-      // Wenn der Akku voll aufgeladen ist, wechsle in CHARGING State
-      if (batteryLevel == 100) {
-        robotState = RobotState::CHARGING;
-      }
-      // Wenn ein Mähmodus ausgewählt wurde, wechsle in MOWING State
-      else if (mowMode != MowMode::RANDOM) {
-        robotState = RobotState::MOWING;
-      }
-      break;
-  }
-}
+#endif
