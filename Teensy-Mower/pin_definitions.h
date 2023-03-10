@@ -1,6 +1,6 @@
 // Pin definitions for Teensy 4.1
-#ifndef PIN_DEFS_H
-#define PIN_DEFS_H
+#ifndef PIN_DEFINATIONS_H
+#define PIN_DEFINATIONS_H
 
 // Pins Motor Driver LEFT
 #define pinMotorLeftEnable 5    // EN motors enable
