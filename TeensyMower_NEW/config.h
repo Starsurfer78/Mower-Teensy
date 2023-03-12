@@ -80,9 +80,9 @@ float ticks_per_meter;        // Ticks per metre
 float max_ticks_per_second;   // max Ticks pro Second
 float max_linear_speed;       // max linear
 
-
+/*
 float calculateWheelCircumference(float wheel_radius){
     return 2.0 * PI * wheel_radius;
 }
-
+*/
 #endif
