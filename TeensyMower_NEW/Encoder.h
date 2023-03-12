@@ -3,18 +3,17 @@
 
 class Encoder {
   public:
-    Encoder(int pin);
+    Encoder();
+    void init();
+    void reset();
+    int32_t read();
+    float readDistance();
     void update();
-    long getTicks();
-    float getRPM();
-    float getSpeed(float wheel_circumference);
-
   private:
-    int _pin;
-    volatile long _ticks;
-    volatile long _last_ticks;
-    volatile long _last_time;
-    volatile long _last_interrupt_time;
+    volatile int32_t count_;
+    volatile int32_t lastCount_;
+    volatile uint32_t lastTime_;
+    volatile int32_t distance_;
 };
 
 #endif

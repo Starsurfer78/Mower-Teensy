@@ -3,53 +3,57 @@
 #include "config.h"
 #include "Encoder.h"
 
-// Encoder constructor
-Encoder::Encoder(int pin) {
-  _pin = pin;
-  _ticks = 0;
-  _last_ticks = 0;
-  _last_time = 0;
-  _last_interrupt_time = 0;
+Encoder::Encoder() {
+  count_ = 0;
+  lastCount_ = 0;
+  lastTime_ = micros();
+  distance_ = 0;
+}
 
-  pinMode(_pin, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(_pin), [] {
-    if (digitalRead(pinOdometryLeft) == digitalRead(pinOdometryRight)) {
-      encoder_left.update();
-      encoder_right.update();
-    } else if (digitalRead(pinOdometryLeft)) {
-      encoder_left.update();
+void Encoder::init() {
+  pinMode(LEFT_ENCODER_PIN, INPUT_PULLUP);
+  pinMode(RIGHT_ENCODER_PIN, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(LEFT_ENCODER_PIN), []() {
+    if (digitalRead(LEFT_ENCODER_PIN_B) == LOW) {
+      count_--;
     } else {
-      encoder_right.update();
+      count_++;
+    }
+  }, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(RIGHT_ENCODER_PIN), []() {
+    if (digitalRead(RIGHT_ENCODER_PIN_B) == LOW) {
+      count_++;
+    } else {
+      count_--;
     }
   }, CHANGE);
 }
 
-// Update ticks count
+void Encoder::reset() {
+  count_ = 0;
+  lastCount_ = 0;
+  lastTime_ = micros();
+  distance_ = 0;
+}
+
+int32_t Encoder::read() {
+  return count_;
+}
+
+float Encoder::readDistance() {
+  return distance_ / TICKS_PER_METER;
+}
+
 void Encoder::update() {
-  int current_time = micros();
-  _ticks++;
-  if (current_time - _last_interrupt_time > 1000) {
-    _last_ticks = _ticks;
-    _last_time = current_time;
+  noInterrupts();
+  int32_t count = count_;
+  interrupts();
+  if (count != lastCount_) {
+    uint32_t time = micros();
+    int32_t dt = time - lastTime_;
+    lastTime_ = time;
+    int32_t delta = count - lastCount_;
+    lastCount_ = count;
+    distance_ += delta;
   }
-  _last_interrupt_time = current_time;
-}
-
-// Get ticks count
-long Encoder::getTicks() {
-  return _last_ticks;
-}
-
-// Get RPM
-float Encoder::getRPM() {
-  float delta_ticks = _ticks - _last_ticks;
-  float delta_time = micros() - _last_time;
-  return delta_ticks / delta_time * 60000000.0 / TICKS_PER_REVOLUTION;
-}
-
-// Get speed in m/s
-float Encoder::getSpeed(float wheel_circumference) {
-  float delta_ticks = _ticks - _last_ticks;
-  float delta_time = micros() - _last_time;
-  return delta_ticks / delta_time * 1000000.0 / TICKS_PER_REVOLUTION * wheel_circumference;
 }
