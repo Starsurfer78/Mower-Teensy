@@ -1,45 +1,37 @@
-#ifndef ROBOTCONTROL_H
-#define ROBOTCONTROL_H
+#ifndef ROBOT_CONTROL_H
+#define ROBOT_CONTROL_H
 
 #include "Arduino.h"
 #include "config.h"
 #include "Motor.h"
+#include "Bumpers.h"
 #include "Encoder.h"
-#include "UltrasonicSensor.h"
-#include "Bumper.h"
-#include "PerimeterSensor.h"
 
 class RobotControl {
   public:
     RobotControl();
     void init();
-    void start();
-    void stop();
-    void loop();
-
+    void set_speed(int left_speed, int right_speed);
+    void stop_motors();
+    void check_bumpers();
+    bool bumper_left_pressed();
+    bool bumper_right_pressed();
+    long left_wheel_distance();
+    long right_wheel_distance();
+    long distance();
+    float orientation();
   private:
-    Motor _motor_left;
-    Motor _motor_right;
+    Motor _left_motor;
+    Motor _right_motor;
+    Bumpers _bumpers;
     Encoder _encoder_left;
     Encoder _encoder_right;
-    UltrasonicSensor _sonar_left;
-    UltrasonicSensor _sonar_right;
-    Bumper _bumper_front_left;
-    Bumper _bumper_front_right;
-    Bumper _bumper_rear_left;
-    Bumper _bumper_rear_right;
-    PerimeterSensor _perimeter_left;
-    PerimeterSensor _perimeter_right;
-
-    void _move_forward(int speed);
-    void _move_backward(int speed);
-    void _turn_left(int speed);
-    void _turn_right(int speed);
-    void _stop();
-    void _check_bumpers();
-    void _check_ultrasonic();
-    void _check_perimeter();
-    void _update_odometry();
+    volatile long _left_encoder_ticks = 0;
+    volatile long _right_encoder_ticks = 0;
+    float _x = 0.0;
+    float _y = 0.0;
+    float _theta = 0.0;
+    void update_position();
 };
 
 #endif
