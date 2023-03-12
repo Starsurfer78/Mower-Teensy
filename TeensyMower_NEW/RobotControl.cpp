@@ -2,6 +2,9 @@
 #include "config.h"
 #include "pin_definations.h"
 #include "RobotControl.h"
+#include "Bumpers.h"
+#include "Encoder.h"
+#include "Motor.h"
 
 RobotControl::RobotControl() :
     _left_motor(LEFT_MOTOR_PWM_PIN, LEFT_MOTOR_DIR_PIN, RIGHT_MOTOR_PWM_PIN, RIGHT_MOTOR_DIR_PIN),

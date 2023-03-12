@@ -3,57 +3,49 @@
 #include "config.h"
 #include "Encoder.h"
 
-Encoder::Encoder() {
-  count_ = 0;
-  lastCount_ = 0;
-  lastTime_ = micros();
-  distance_ = 0;
-}
+const float Encoder::WHEEL_CIRCUMFERENCE = PI * WHEEL_DIAMETER;
+const float Encoder::MM_PER_TICK = WHEEL_CIRCUMFERENCE / TICKS_PER_REV;
 
 void Encoder::init() {
-  pinMode(LEFT_ENCODER_PIN, INPUT_PULLUP);
-  pinMode(RIGHT_ENCODER_PIN, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(LEFT_ENCODER_PIN), []() {
-    if (digitalRead(LEFT_ENCODER_PIN_B) == LOW) {
-      count_--;
-    } else {
-      count_++;
-    }
-  }, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(RIGHT_ENCODER_PIN), []() {
-    if (digitalRead(RIGHT_ENCODER_PIN_B) == LOW) {
-      count_++;
-    } else {
-      count_--;
-    }
-  }, CHANGE);
+  pinMode(_pin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(_pin), _interrupt_handler, CHANGE);
 }
 
 void Encoder::reset() {
-  count_ = 0;
-  lastCount_ = 0;
-  lastTime_ = micros();
-  distance_ = 0;
-}
-
-int32_t Encoder::read() {
-  return count_;
-}
-
-float Encoder::readDistance() {
-  return distance_ / TICKS_PER_METER;
-}
-
-void Encoder::update() {
   noInterrupts();
-  int32_t count = count_;
+  _ticks = 0;
+  _last_ticks = 0;
   interrupts();
-  if (count != lastCount_) {
-    uint32_t time = micros();
-    int32_t dt = time - lastTime_;
-    lastTime_ = time;
-    int32_t delta = count - lastCount_;
-    lastCount_ = count;
-    distance_ += delta;
+}
+
+int32_t Encoder::get_ticks() {
+  noInterrupts();
+  int32_t ticks = _ticks;
+  interrupts();
+  return ticks;
+}
+
+float Encoder::get_distance() {
+  return get_ticks() * MM_PER_TICK;
+}
+
+void Encoder::_interrupt_handler() {
+  static int8_t last_a = 0;
+  static int8_t last_b = 0;
+
+  int8_t a = digitalRead(pinOdometryLeft);
+  int8_t b = digitalRead(pinOdometryRight);
+
+  if (a == last_a && b == last_b) {
+    return;
   }
+
+  if (a == b) {
+    Encoder::_ticks++;
+  } else {
+    Encoder::_ticks--;
+  }
+
+  last_a = a;
+  last_b = b;
 }
