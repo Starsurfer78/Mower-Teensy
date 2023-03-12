@@ -76,12 +76,12 @@ void RobotControl::update_position() {
 
 // Get the left wheel distance in millimeters
 long RobotControl::left_wheel_distance() {
-  return _encoder_left.get_ticks() * TICK_TO_MM;
+  //return _encoder_left.get_ticks() * TICK_TO_MM;
 }
 
 // Get the right wheel distance in millimeters
 long RobotControl::right_wheel_distance() {
-  return _encoder_right.get_ticks() * TICK_TO_MM;
+  //return _encoder_right.get_ticks() * TICK_TO_MM;
 }
 
 // Get the distance travelled by the robot in millimeters
