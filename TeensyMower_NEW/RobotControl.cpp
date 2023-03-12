@@ -1,115 +1,102 @@
-void RobotControl::set_speed(int speed_left, int speed_right) {
-  motor_left.set_speed(speed_left);
-  motor_right.set_speed(-speed_right);
+#include <Arduino.h>
+#include "config.h"
+#include "pin_definations.h"
+#include "RobotControl.h"
+
+RobotControl::RobotControl() :
+    _left_motor(LEFT_MOTOR_PWM_PIN, LEFT_MOTOR_DIR_PIN, RIGHT_MOTOR_PWM_PIN, RIGHT_MOTOR_DIR_PIN),
+    _right_motor(RIGHT_MOTOR_PWM_PIN, RIGHT_MOTOR_DIR_PIN, LEFT_MOTOR_PWM_PIN, LEFT_MOTOR_DIR_PIN),
+    _bumpers(BUMPER1_PIN, BUMPER2_PIN),
+    _left_encoder_ticks(0),
+    _right_encoder_ticks(0)
+{}
+
+void RobotControl::init() {
+  _left_motor.init();
+  _right_motor.init();
+  _bumpers.init();
+  _encoder_left.init();
+  _encoder_right.init();
 }
 
-void RobotControl::drive_forward(int speed) {
-  set_speed(speed, speed);
+void RobotControl::set_speed(int left_speed, int right_speed) {
+  // Set motor speed
+  _left_motor.set_speed(left_speed);
+  _right_motor.set_speed(right_speed);
 }
 
-void RobotControl::drive_backward(int speed) {
-  set_speed(-speed, -speed);
+void RobotControl::stop_motors() {
+  // Stop both motors
+  _left_motor.stop();
+  _right_motor.stop();
 }
 
-void RobotControl::turn_left(int speed) {
-  set_speed(-speed, speed);
-}
-
-void RobotControl::turn_right(int speed) {
-  set_speed(speed, -speed);
-}
-
-void RobotControl::stop() {
-  set_speed(0, 0);
-}
-
-void RobotControl::update() {
-  update_encoders();
-  update_bumpers();
-}
-
-void RobotControl::update_encoders() {
-  int encoder_left_count = encoder_left.read();
-  int encoder_right_count = encoder_right.read();
-
-  int encoder_left_diff = encoder_left_count - _encoder_left_count;
-  int encoder_right_diff = encoder_right_count - _encoder_right_count;
-
-  _encoder_left_count = encoder_left_count;
-  _encoder_right_count = encoder_right_count;
-
-  _distance_left += encoder_left_diff * WHEEL_CIRCUMFERENCE / ENCODER_COUNTS_PER_REVOLUTION;
-  _distance_right += encoder_right_diff * WHEEL_CIRCUMFERENCE / ENCODER_COUNTS_PER_REVOLUTION;
-
-  _velocity_left = encoder_left_diff / ENCODER_COUNTS_PER_REVOLUTION * WHEEL_CIRCUMFERENCE / (millis() - _last_encoder_update);
-  _velocity_right = encoder_right_diff / ENCODER_COUNTS_PER_REVOLUTION * WHEEL_CIRCUMFERENCE / (millis() - _last_encoder_update);
-  
-  _last_encoder_update = millis();
-}
-
-void RobotControl::update_bumpers() {
-  if (_bumper_left_triggered) {
-    _bumper_left_triggered = false;
-    _bumper_left_debouncing = true;
-    _last_bumper_update = millis();
+void RobotControl::check_bumpers() {
+  // Check if bumpers are pressed and stop motors if so
+  if (_bumpers.left_pressed() || _bumpers.right_pressed()) {
+    stop_motors();
   }
-
-  if (_bumper_right_triggered) {
-    _bumper_right_triggered = false;
-    _bumper_right_debouncing = true;
-    _last_bumper_update = millis();
-  }
-
-  if (_bumper_left_debouncing && millis() - _last_bumper_update > BUMPER_DEBOUNCE_TIME) {
-    _bumper_left_debouncing = false;
-    if (digitalRead(PIN_BUMPER_LEFT) == LOW) {
-      _bumper_left_pressed = true;
-    }
-  }
-
-  if (_bumper_right_debouncing && millis() - _last_bumper_update > BUMPER_DEBOUNCE_TIME) {
-    _bumper_right_debouncing = false;
-    if (digitalRead(PIN_BUMPER_RIGHT) == LOW) {
-      _bumper_right_pressed = true;
-    }
-  }
-}
-
-bool RobotControl::bumper_left_triggered() {
-  return _bumper_left_triggered;
-}
-
-bool RobotControl::bumper_right_triggered() {
-  return _bumper_right_triggered;
 }
 
 bool RobotControl::bumper_left_pressed() {
-  if (_bumper_left_pressed) {
-    _bumper_left_pressed = false;
-    return true;
-  } else {
-    return false;
-  }
+  // Check if left bumper is pressed
+  return _bumpers.left_pressed();
 }
 
 bool RobotControl::bumper_right_pressed() {
-  if (_bumper_right_pressed) {
-    _bumper_right_pressed = false;
-    return true;
-  } else {
-    return false;
+  // Check if right bumper is pressed
+  return _bumpers.right_pressed();
+}
+
+void RobotControl::update_position() {
+  // calculate distance travelled by each wheel
+  long left_ticks = _encoder_left.get_ticks();
+  long right_ticks = _encoder_right.get_ticks();
+  long left_delta = left_ticks - _left_encoder_ticks;
+  long right_delta = right_ticks - _right_encoder_ticks;
+  _left_encoder_ticks = left_ticks;
+  _right_encoder_ticks = right_ticks;
+
+  float left_distance = left_delta * TICK_TO_DIST;
+  float right_distance = right_delta * TICK_TO_DIST;
+
+  // calculate orientation
+  float delta_theta = (right_distance - left_distance) / WHEEL_BASE;
+  _theta += delta_theta;
+
+  // calculate distance travelled by the robot
+  float distance_travelled = (left_distance + right_distance) / 2.0;
+
+  // update position
+  float delta_x = distance_travelled * cos(_theta);
+  float delta_y = distance_travelled * sin(_theta);
+  _x += delta_x;
+  _y += delta_y;
+}
+
+// Get the left wheel distance in millimeters
+long RobotControl::left_wheel_distance() {
+  return _encoder_left.get_ticks() * TICK_TO_MM;
+}
+
+// Get the right wheel distance in millimeters
+long RobotControl::right_wheel_distance() {
+  return _encoder_right.get_ticks() * TICK_TO_MM;
+}
+
+// Get the distance travelled by the robot in millimeters
+long RobotControl::distance() {
+  return (left_wheel_distance() + right_wheel_distance()) / 2;
+}
+
+// Get the orientation of the robot in radians
+float RobotControl::orientation() {
+  float orientation = _theta;
+  while (orientation > PI) {
+    orientation -= 2 * PI;
   }
+  while (orientation <= -PI) {
+    orientation += 2 * PI;
+  }
+  return orientation;
 }
-
-float RobotControl::distance_left() {
-  return _distance_left;
-}
-
-float RobotControl::distance_right() {
-  return _distance_right;
-}
-
-float RobotControl::velocity_left() {
-  return _velocity_left;
-}
-

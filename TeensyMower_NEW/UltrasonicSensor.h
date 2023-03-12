@@ -1,6 +1,7 @@
 #ifndef SONAR_H
 #define SONAR_H
 
+#include <Arduino.h>
 #include "pin_definations.h"
 #include "config.h"
 

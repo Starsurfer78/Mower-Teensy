@@ -14,9 +14,9 @@
 #define pinMotorRightEnable 2   // EN motors enable
 #define pinMotorRightPWM 4      // M2_IN1 right motor PWM pin
 #define pinMotorRightDir 3      // M2_IN2 right motor Dir pin
-#define pinMotorMowEnable 8     // EN mower motor enable      (if using MOSFET/L298N, keep unconnected)
 
 // Pins Motor Cuter Driver
+#define pinMotorMowEnable 8     // EN mower motor enable      (if using MOSFET/L298N, keep unconnected)
 #define pinMotorMowPWM 10       // M1_IN1 mower motor PWM pin (if using MOSFET, use this pin)
 #define pinMotorMowDir 9        // M1_IN2 mower motor Dir pin (if using MOSFET, keep unconnected)
 

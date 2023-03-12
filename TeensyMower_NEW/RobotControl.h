@@ -1,8 +1,9 @@
 #ifndef ROBOT_CONTROL_H
 #define ROBOT_CONTROL_H
 
-#include "Arduino.h"
+#include <Arduino.h>
 #include "config.h"
+#include "pin_definations.h"
 #include "Motor.h"
 #include "Bumpers.h"
 #include "Encoder.h"

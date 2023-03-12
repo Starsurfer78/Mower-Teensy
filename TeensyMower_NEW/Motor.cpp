@@ -1,4 +1,6 @@
 #include <Arduino.h>
+#include "config.h"
+#include "pin_definations.h"
 #include "Motor.h"
 #include "Encoder.h"
 

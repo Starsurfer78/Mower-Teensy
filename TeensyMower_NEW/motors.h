@@ -1,6 +1,7 @@
 #ifndef MOTORS_H
 #define MOTORS_H
 
+#include <Arduino.h>
 #include "pin_definations.h"
 #include "config.h"
 

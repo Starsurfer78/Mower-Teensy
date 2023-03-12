@@ -1,6 +1,7 @@
-#include "Encoder.h"
+#include <Arduino.h>
 #include "pin_definations.h"
 #include "config.h"
+#include "Encoder.h"
 
 // Encoder constructor
 Encoder::Encoder(int pin) {

@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "src/NewPing.h"
 #include "pin_definations.h"
 #include "config.h"

@@ -1,4 +1,6 @@
-#include "Bumpers.h"
+#include <Arduino.h>
+#include "config.h"
+#include "pin_definations.h"
 
 volatile bool left_bumper_pressed = false;
 volatile bool right_bumper_pressed = false;
