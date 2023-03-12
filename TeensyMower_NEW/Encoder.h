@@ -1,6 +1,9 @@
 #ifndef ENCODER_H
 #define ENCODER_H
 
+#include "pin_definations.h"
+#include "config.h"
+
 class Encoder {
   public:
     Encoder(int pin_a);

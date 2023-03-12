@@ -1,5 +1,6 @@
 #include "src/NewPing.h"
 #include "pin_definations.h"
+#include "config.h"
 #include "sonar.h"
 
 NewPing sonar_left(pinSonarLeftTrigger, pinSonarLeftEcho, MAX_DISTANCE);

@@ -46,7 +46,7 @@ const float batSwitchOffIfBelow = 20.0;      // At how many volts should the rob
 #define usessonar true        // true/false Did the Robot use Ultrasonic Sensors?
 //#define sonarleftright true   // Use Sonar Left and Right?
 //#define sonarcenter true      // Use Sonar Center?
-const float MAX_DISTANCE_SONAR 200;    // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
+const float MAX_DISTANCE_SONAR = 200;    // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 const int OBSTACLE_DISTANCE = 30;   // Standard distance to obstacle
 
 //Bumper
@@ -75,7 +75,7 @@ const int inaBattAddr = 0x43;
 
 // No changes needed ->
 // Variables
-float wheel_circumference = calculateWheelCircumference(WHEEL_RADIUS);    // Wheel circumference
+float wheel_circumference = (2.0 * PI * WHEEL_RADIUS);    // Wheel circumference
 float ticks_per_meter;        // Ticks per metre
 float max_ticks_per_second;   // max Ticks pro Second
 float max_linear_speed;       // max linear

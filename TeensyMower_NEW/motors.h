@@ -1,6 +1,9 @@
 #ifndef MOTORS_H
 #define MOTORS_H
 
+#include "pin_definations.h"
+#include "config.h"
+
 // Variablen
 int left_ticks = 0;
 int right_ticks = 0;

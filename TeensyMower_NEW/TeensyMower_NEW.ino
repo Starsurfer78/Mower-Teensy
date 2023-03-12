@@ -4,6 +4,9 @@
 #include "src/INA226.h"
 #include "sonar.h"
 #include "motors.h"
+#include "RobotControl.h"
+#include "Encoder.h"
+#include "Motor.h"
 
 void setup() {
   Wire.begin();

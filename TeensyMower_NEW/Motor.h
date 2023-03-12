@@ -2,12 +2,13 @@
 #define MOTOR_H
 
 #include <Arduino.h>
+#include "pin_definations.h"
 #include "config.h"
 
 class Motor {
 public:
   public:
-    Motion(int left_motor_pwm_pin, int left_motor_dir_pin, int right_motor_pwm_pin, int right_motor_dir_pin);
+    Motor(int left_motor_pwm_pin, int left_motor_dir_pin, int right_motor_pwm_pin, int right_motor_dir_pin);
     void forward(int speed);
     void backward(int speed);
     void turn_left(int speed);

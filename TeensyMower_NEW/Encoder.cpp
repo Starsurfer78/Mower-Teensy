@@ -1,4 +1,7 @@
+#include "Arduino.h"
 #include "Encoder.h"
+#include "pin_definations.h"
+#include "config.h"
 
 Encoder::Encoder(int pin_a) {
   _pin_a = pin_a;

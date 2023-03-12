@@ -2,6 +2,9 @@
 #ifndef PIN_DEFINATIONS_H
 #define PIN_DEFINATIONS_H
 
+#include "config.h"
+
+
 // Pins Motor Driver LEFT
 #define pinMotorLeftEnable 5    // EN motors enable
 #define pinMotorLeftPWM 7       // M1_IN1 left motor PWM pin

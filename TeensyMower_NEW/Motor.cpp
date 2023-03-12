@@ -1,4 +1,6 @@
 #include "Motor.h"
+#include "pin_definations.h"
+#include "config.h"
 
 Motor::Motor(int left_motor_pwm_pin, int left_motor_dir_pin, int right_motor_pwm_pin, int right_motor_dir_pin) {
   _left_motor_pwm_pin = left_motor_pwm_pin;
