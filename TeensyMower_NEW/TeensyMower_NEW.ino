@@ -2,16 +2,14 @@
 #include "pin_definations.h"
 #include "Motor.h"
 #include "Encoder.h"
+#include "RobotControl.h"
 
-//Encoder encoder_left(pinOdometryLeft, TICKS_PER_REV);
-//Encoder encoder_right(pinOdometryRight, TICKS_PER_REV);
+RobotControl robot;
 
 void setup() {
-  // Initialisierung des seriellen Monitors
-  Serial.begin(9600);
-  
-
+  robot.init();
 }
+
 
 void loop() {
 

@@ -1,7 +1,7 @@
 #include "src/NewPing.h"
 #include "pin_definations.h"
 #include "config.h"
-#include "sonar.h"
+#include "UltrasonicSensor.h"
 
 NewPing sonar_left(pinSonarLeftTrigger, pinSonarLeftEcho, MAX_DISTANCE);
 NewPing sonar_right(pinSonarRightTrigger, pinSonarRightEcho, MAX_DISTANCE);
