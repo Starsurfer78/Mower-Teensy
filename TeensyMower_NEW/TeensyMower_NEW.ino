@@ -2,13 +2,8 @@
 #include "pin_definations.h"
 #include "config.h"
 #include "src/INA226.h"
-
-//NewPing for the Ultrasonic Sensors
-#ifdef usessonar
-#include "src/NewPing.h"
-NewPing sonar_left(pinSonarLeftTrigger, pinSonarLeftEcho, MAX_DISTANCE);
-NewPing sonar_right(pinSonarRightTrigger, pinSonarRightEcho, MAX_DISTANCE);
-#endif
+#include "sonar.h"
+#include "motors.h"
 
 void setup() {
   Wire.begin();
@@ -33,6 +28,11 @@ void configurePins() {
   pinMode(pinMotorRightDir, OUTPUT);
   pinMode(pinMotorMowPWM, OUTPUT);
   pinMode(pinMotorMowDir, OUTPUT);
+  // Interrupts Encoder
+  pinMode(pinOdometryLeft, INPUT);
+  pinMode(pinOdometryRight, INPUT);
+  //attachInterrupt(digitalPinToInterrupt(pinOdometryLeft), left_tick_isr, RISING);
+  //attachInterrupt(digitalPinToInterrupt(pinOdometryRight), right_tick_isr, RISING);
 
   // Bumper pins
   if (usesbumper) {
