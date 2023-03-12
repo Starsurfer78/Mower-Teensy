@@ -1,14 +1,15 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#include <Arduino.h>
-#include "pin_definations.h"
+#include "Arduino.h"
 #include "config.h"
+#include "pin_definations.h"
 
 class Motor {
-public:
   public:
     Motor(int left_motor_pwm_pin, int left_motor_dir_pin, int right_motor_pwm_pin, int right_motor_dir_pin);
+    void init();
+    void setSpeed(int speed);
     void forward(int speed);
     void backward(int speed);
     void turn_left(int speed);
@@ -19,8 +20,7 @@ public:
     int _left_motor_dir_pin;
     int _right_motor_pwm_pin;
     int _right_motor_dir_pin;
-    int _speed;
+    int _speed = MIN_SPEED;
 };
-    void setSpeed(int speed);
 
 #endif

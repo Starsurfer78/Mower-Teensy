@@ -1,19 +1,20 @@
 #ifndef ENCODER_H
 #define ENCODER_H
 
-#include <Arduino.h>
-#include "pin_definations.h"
-#include "config.h"
-
 class Encoder {
   public:
-    Encoder(int pin_a);
-    void setup();
-    int read();
+    Encoder(int pin);
+    void update();
+    long getTicks();
+    float getRPM();
+    float getSpeed(float wheel_circumference);
+
   private:
-    int _pin_a;
-    int _position;
-    int _last_state;
+    int _pin;
+    volatile long _ticks;
+    volatile long _last_ticks;
+    volatile long _last_time;
+    volatile long _last_interrupt_time;
 };
 
 #endif

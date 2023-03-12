@@ -1,7 +1,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include <math.h>
 #include "pin_definations.h"
+
 
 #define MowerName "MatrixMOW"
 #define PCB_V103 true

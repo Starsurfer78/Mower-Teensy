@@ -71,8 +71,8 @@ float calculate_speed(int left_ticks, int left_ticks, float target_speed) {
     return 0;
   }
   
-  float delta_ticks_left = left_ticks - previous_ticks_left;
-  float delta_ticks_right = right_ticks - previous_ticks_right;
+  float delta_ticks_left = left_ticks - last_left_ticks;
+  float delta_ticks_right = right_ticks - last_right_ticks;
   
   float distance_left = (delta_ticks_left / TICKS_PER_REV) * WHEEL_CIRCUMFERENCE;
   float distance_right = (delta_ticks_right / TICKS_PER_REV) * WHEEL_CIRCUMFERENCE;

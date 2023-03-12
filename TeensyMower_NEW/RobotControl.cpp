@@ -1,17 +1,18 @@
+#include <Arduino.h>
+#include <math.h>
+#include "pin_definations.h"
+#include "config.h"
 #include "RobotControl.h"
-#include "Encoder.h"
 #include "Motor.h"
 
-Encoder encoder_left(pinOdometryLeft);
-Encoder encoder_right(pinOdometryRight);
-Motor motor_left(6, 7, 9);
-Motor motor_right(8, 10, 11);
 
 void setup_robot() {
-  encoder_left.setup();
-  encoder_right.setup();
-  motor_left.setup();
-  motor_right.setup();
+  Encoder encoder_left(pinOdometryLeft, TICKS_PER_REV);
+  Encoder encoder_right(pinOdometryRight, TICKS_PER_REV);
+  //encoder_left.setup();
+  //encoder_right.setup();
+  //motor_left.setup();
+  //motor_right.setup();
 }
 
 void drive_forward(float distance) {
