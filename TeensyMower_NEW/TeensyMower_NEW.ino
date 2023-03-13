@@ -4,8 +4,33 @@
 #include "Bumper.h"
 #include "Ultrasonic.h"
 #include "Motor.h"
+#include "src/MPU6050.h"
+#include "Robot.h"
 
+Robot robot;  // declare a Robot object
 
+void setup() {
+  Serial.begin(115200);
+  robot.initialize();
+}
+
+void loop() {
+  // drive straight
+  //robot.driveStraight(5000, 500);
+  delay(1000);
+  
+  // turn 90 degrees
+  //robot.turn(90);
+  delay(1000);
+  
+  // repeat
+  //robot.driveStraight(5000, 500);
+  delay(1000);
+  //robot.turn(90);
+  delay(1000);
+}
+
+/*
 Motor leftMotor(pinMotorLeftEnable, pinMotorLeftDir, pinMotorLeftPWM);
 Motor rightMotor(pinMotorRightEnable, pinMotorRightDir, pinMotorRightPWM);
 Ultrasonic leftSonar(pinSonarLeftTrigger, pinSonarLeftEcho);
@@ -53,3 +78,4 @@ void loop() {
   rightMotor.stop();
   delay(1000);
 }
+*/
