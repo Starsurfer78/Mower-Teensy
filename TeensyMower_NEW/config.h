@@ -40,7 +40,7 @@ extern const int inaBattAddr;
 
 extern const int ticks_per_meter;
 extern const int max_ticks_per_second;
-extern const float max_linear_speed;
-extern const float wheel_circumference;
+extern const int max_linear_speed;
+extern const int wheel_circumference;
 
 #endif

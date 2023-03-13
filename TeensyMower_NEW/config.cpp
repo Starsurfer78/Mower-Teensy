@@ -36,4 +36,4 @@ const int inaBattAddr = 0x40;
 const int ticks_per_meter = (TICKS_PER_REV * 100) / (WHEEL_DIAMETER * PI); // Ticks per meter
 const int max_ticks_per_second = (MAX_SPEED * TICKS_PER_REV) / 60;        // Max ticks per second
 const int max_linear_speed = (WHEEL_DIAMETER * PI * MAX_SPEED) / 60;      // Max linear speed
-const float wheel_circumference = (2.0 * PI * WHEEL_DIAMETER);            // Wheel circumference
+const int wheel_circumference = (2.0 * PI * WHEEL_DIAMETER);            // Wheel circumference
