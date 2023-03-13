@@ -21,7 +21,7 @@ extern const float batGoHomeIfBelow;         // At how many volts should it driv
 extern const float batSwitchOffIfBelow;      // At how many volts should the robot be switched off?
 extern const bool usestation;        // true/false Did the Roboter use a Charging Station?
 extern const bool leavestationdirection; // true/false In which direction should the robot turn after it has left the station?
-extern const bool usesonar;        // true/false Did the Robot use Ultrasonic Sensors?
+extern const bool usessonar;        // true/false Did the Robot use Ultrasonic Sensors?
 extern const float MAX_DISTANCE_SONAR;    // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 extern const int OBSTACLE_DISTANCE;   // Standard distance to obstacle
 extern const bool usesbumper;       // true/false Did the Robot use Ultrasonic Sensors?
@@ -38,10 +38,9 @@ extern const int inaMotorRightAddr;
 extern const int inaCutterAddr;
 extern const int inaBattAddr;
 
-extern const float ticks_per_meter;
-extern const float max_ticks_per_second;
+extern const int ticks_per_meter;
+extern const int max_ticks_per_second;
 extern const float max_linear_speed;
 extern const float wheel_circumference;
 
 #endif
-

@@ -1,17 +1,20 @@
-#ifndef MOTOR_H
-#define MOTOR_H
+#ifndef Motor_h
+#define Motor_h
+
+#include "Arduino.h"
 
 class Motor {
   public:
-    Motor(uint8_t _in1_pin, uint8_t _in2_pin, uint8_t _pwm_pin, float _ticks_per_meter);
-    void setSpeed(float linear_speed);
+    Motor(int pwmPin, int dirPin1, int dirPin2);
+    void setSpeed(float speed);
+    void setDirection(boolean direction);
     void stop();
-    float getCurrentSpeed();
+
   private:
-    uint8_t in1_pin, in2_pin, pwm_pin;
-    float ticks_per_meter;
-    float current_speed;
-    void updateSpeed(float linear_speed);
+    int _pwmPin;
+    int _dirPin1;
+    int _dirPin2;
 };
 
 #endif
+

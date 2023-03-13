@@ -1,40 +1,41 @@
 #include "Motor.h"
-#include <Arduino.h>
-#include "config.h"
-#include "pin_definations.h"
 
-Motor::Motor(uint8_t _in1_pin, uint8_t _in2_pin, uint8_t _pwm_pin, float _ticks_per_meter)
-{
-  in1_pin = _in1_pin;
-  in2_pin = _in2_pin;
-  pwm_pin = _pwm_pin;
-  ticks_per_meter = _ticks_per_meter;
-  pinMode(in1_pin, OUTPUT);
-  pinMode(in2_pin, OUTPUT);
-  pinMode(pwm_pin, OUTPUT);
+Motor::Motor(int pwmPin, int dirPin1, int dirPin2) {
+  _pwmPin = pwmPin;
+  _dirPin1 = dirPin1;
+  _dirPin2 = dirPin2;
+
+  pinMode(_pwmPin, OUTPUT);
+  pinMode(_dirPin1, OUTPUT);
+  pinMode(_dirPin2, OUTPUT);
 }
 
-void Motor::setSpeed(float linear_speed)
-{
-  updateSpeed(linear_speed);
-  int pwm_value = map(current_speed, 0, max_linear_speed, MIN_PWM, MAX_PWM);
-  analogWrite(pwm_pin, pwm_value);
+void Motor::setSpeed(float speed) {
+  if (speed > 1.0) speed = 1.0;
+  if (speed < -1.0) speed = -1.0;
+
+  int pwmValue = map(abs(speed) * 100, 0, 100, 0, 255);
+  analogWrite(_pwmPin, pwmValue);
+
+  if (speed >= 0) {
+    digitalWrite(_dirPin1, HIGH);
+    digitalWrite(_dirPin2, LOW);
+  } else {
+    digitalWrite(_dirPin1, LOW);
+    digitalWrite(_dirPin2, HIGH);
+  }
 }
 
-void Motor::stop()
-{
-  analogWrite(pwm_pin, 0);
+void Motor::setDirection(boolean direction) {
+  if (direction) {
+    digitalWrite(_dirPin1, HIGH);
+    digitalWrite(_dirPin2, LOW);
+  } else {
+    digitalWrite(_dirPin1, LOW);
+    digitalWrite(_dirPin2, HIGH);
+  }
 }
 
-float Motor::getCurrentSpeed()
-{
-  return current_speed;
-}
-
-void Motor::updateSpeed(float linear_speed)
-{
-  float target_speed = linear_speed / wheel_circumference * ticks_per_meter * 60.0;
-  target_speed = constrain(target_speed, -MAX_SPEED, MAX_SPEED);
-  float error = target_speed - current_speed;
-  current_speed += constrain(error, -maxAcceleration, maxAcceleration);
+void Motor::stop() {
+  analogWrite(_pwmPin, 0);
 }

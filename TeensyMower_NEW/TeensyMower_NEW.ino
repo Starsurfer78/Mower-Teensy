@@ -6,8 +6,8 @@
 #include "Motor.h"
 
 
-Motor leftMotor(pinMotorLeftEnable, pinMotorLeftDir, pinMotorLeftPWM, TICKS_PER_METER);
-Motor rightMotor(pinMotorRightEnable, pinMotorRightDir, pinMotorRightPWM, TICKS_PER_METER);
+Motor leftMotor(pinMotorLeftEnable, pinMotorLeftDir, pinMotorLeftPWM);
+Motor rightMotor(pinMotorRightEnable, pinMotorRightDir, pinMotorRightPWM);
 Ultrasonic leftSonar(pinSonarLeftTrigger, pinSonarLeftEcho);
 Ultrasonic rightSonar(pinSonarRightTrigger, pinSonarRightEcho);
 Bumper bumper;
