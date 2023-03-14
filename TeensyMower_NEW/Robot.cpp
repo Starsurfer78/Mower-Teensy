@@ -11,6 +11,9 @@ void Robot::initialize() {
   //Stop the Motors at Start
   motor_left.stop();
   motor_right.stop();
+  bumper.init();
+  Ultrasonic leftSonar(pinSonarLeftTrigger, pinSonarLeftEcho);
+  Ultrasonic rightSonar(pinSonarRightTrigger, pinSonarRightEcho);
 }
 
 void Robot::driveForward(float distance) {
